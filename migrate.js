@@ -1,5 +1,7 @@
 const sequelize = require('./src/config');
 const SpeedTestResult = require('./src/models/SpeedTestResult');
+const Config = require('./src/models/Config');
+
 
 const runMigrations = async () => {
   try {

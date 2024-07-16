@@ -1,5 +1,6 @@
 const express = require('express');
 const sequelize = require('./config');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -11,7 +12,7 @@ sequelize.authenticate()
   .catch(err => console.log('Error: ' + err));
 
 
-//endpoint teste init
+//endpoint teste
 app.get('/test-db', async (req, res) => {
     try {
       const result = await sequelize.query('SELECT name FROM sqlite_master WHERE type="table";');
