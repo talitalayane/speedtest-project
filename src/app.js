@@ -1,27 +1,54 @@
 const express = require('express');
-const sequelize = require('./config');
+const bodyParser = require('body-parser');
+const routes = require('./routes/routes');
+const cron = require('node-cron');
+const speedTest = require('speedtest-net');
+const { SpeedTestResult, Config } = require('./models');
 
+// Inicializa o app
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = 3000;
 
-app.use(express.json());
+// Middlewares
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// Teste de conexão com o banco de dados
-sequelize.authenticate()
-  .then(() => console.log('Database connected...'))
-  .catch(err => console.log('Error: ' + err));
+// Rotas
+app.use('/', routes);
 
-
-//endpoint teste
-app.get('/test-db', async (req, res) => {
+// Função para executar o teste de velocidade
+const runSpeedTest = async () => {
     try {
-      const result = await sequelize.query('SELECT name FROM sqlite_master WHERE type="table";');
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
+        console.log('Iniciando o teste de velocidade...');
+        const result = await speedTest({ acceptLicense: true, acceptGdpr: true });
+        
+        const data = {
+            downloadSpeed: (result.download.bandwidth * 8) / 1e6, // Convertendo de bps para Mbps
+            uploadSpeed: (result.upload.bandwidth * 8) / 1e6, // Convertendo de bps para Mbps
+            ping: result.ping.latency,
+            timestamp: new Date(result.timestamp)
+        };
 
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-  });
+        await SpeedTestResult.create(data);
+        console.log('Teste de velocidade salvo no banco de dados:', data);
+    } catch (error) {
+        console.error('Erro ao executar o teste de velocidade:', error);
+    }
+};
+
+// Cron job para executar o teste de velocidade em intervalos configuráveis
+const setupCronJob = async () => {
+    const config = await Config.findOne();
+    const interval = config ? config.interval : '*/30 * * * *'; // Padrão para cada 30 minutos
+
+    cron.schedule(interval, runSpeedTest);
+    console.log(`Cron job configurado para executar a cada: ${interval}`);
+};
+
+// Inicializa o cron job
+setupCronJob();
+
+// Inicia o servidor
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});

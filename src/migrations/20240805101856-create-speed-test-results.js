@@ -11,30 +11,23 @@ module.exports = {
       },
       downloadSpeed: {
         type: Sequelize.FLOAT,
-        allowNull: false,
+        allowNull: false
       },
       uploadSpeed: {
         type: Sequelize.FLOAT,
-        allowNull: false,
+        allowNull: false
       },
       ping: {
         type: Sequelize.FLOAT,
-        allowNull: false,
-      },
-      timestamp: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-        allowNull: false,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        type: Sequelize.DATE
       }
     });
   },

@@ -11,18 +11,15 @@ module.exports = {
       },
       interval: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 60
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        type: Sequelize.DATE
       }
     });
   },

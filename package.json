@@ -1,22 +1,24 @@
 {
   "name": "speedtest-project",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Projeto para testar a velocidade da internet e salvar os resultados",
+  "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/app.js",
-    "migrate": "node migrate.js"
+    "dev": "nodemon src/app.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
     "node-cron": "^3.0.3",
-    "sequelize": "^6.37.3",
+    "sequelize": "^6.6.5",
     "sequelize-cli": "^6.6.2",
-    "sqlite3": "^5.1.7"
-  }
+    "speedtest-net": "^2.2.0",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "author": "Seu Nome",
+  "license": "ISC"
 }
